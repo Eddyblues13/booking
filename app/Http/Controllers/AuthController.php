@@ -45,6 +45,11 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'phone' => 'required|string|max:20',
             'password' => 'required|string|min:8|confirmed',
+            'date_of_birth' => 'required|date',
+            'nationality' => 'required|string|max:255',
+            'passport_number' => 'required|string|max:255',
+            'passport_expiry' => 'required|date',
+            'gender' => 'required|in:male,female,other',
             'terms' => 'required',
         ]);
 
@@ -58,11 +63,16 @@ class AuthController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
+            'date_of_birth' => $request->date_of_birth,
+            'nationality' => $request->nationality,
+            'passport_number' => $request->passport_number,
+            'passport_expiry' => $request->passport_expiry,
+            'gender' => $request->gender,
         ]);
 
         Auth::login($user);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('login');
     }
 
     public function logout(Request $request)

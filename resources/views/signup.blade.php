@@ -68,58 +68,95 @@
                         <p class="text-muted">Create your Qatar Airways account and start earning Qmiles</p>
                     </div>
 
-                    <form>
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('register') }}">
+                        @csrf
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label for="firstName" class="form-label">First Name</label>
-                                <input type="text" class="form-control form-control-lg" id="firstName"
-                                    placeholder="First name">
+                                <label for="first_name" class="form-label">First Name</label>
+                                <input type="text" class="form-control form-control-lg" id="first_name"
+                                    name="first_name" placeholder="First name" value="{{ old('first_name') }}" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="lastName" class="form-label">Last Name</label>
-                                <input type="text" class="form-control form-control-lg" id="lastName"
-                                    placeholder="Last name">
+                                <label for="last_name" class="form-label">Last Name</label>
+                                <input type="text" class="form-control form-control-lg" id="last_name" name="last_name"
+                                    placeholder="Last name" value="{{ old('last_name') }}" required>
                             </div>
 
                             <div class="col-12">
                                 <label for="email" class="form-label">Email Address</label>
-                                <input type="email" class="form-control form-control-lg" id="email"
-                                    placeholder="Enter your email">
-                            </div>
-
-                            <div class="col-12">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control form-control-lg" id="password"
-                                    placeholder="Create a password">
-                                <div class="form-text">Must be at least 8 characters with numbers and letters</div>
-                            </div>
-
-                            <div class="col-12">
-                                <label for="confirmPassword" class="form-label">Confirm Password</label>
-                                <input type="password" class="form-control form-control-lg" id="confirmPassword"
-                                    placeholder="Confirm your password">
+                                <input type="email" class="form-control form-control-lg" id="email" name="email"
+                                    placeholder="Enter your email" value="{{ old('email') }}" required>
                             </div>
 
                             <div class="col-12">
                                 <label for="phone" class="form-label">Phone Number</label>
-                                <input type="tel" class="form-control form-control-lg" id="phone"
-                                    placeholder="Phone number">
+                                <input type="tel" class="form-control form-control-lg" id="phone" name="phone"
+                                    placeholder="Phone number" value="{{ old('phone') }}" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control form-control-lg" id="password"
+                                    name="password" placeholder="Create a password" required>
+                                <div class="form-text">Must be at least 8 characters with numbers and letters</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="password_confirmation" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control form-control-lg" id="password_confirmation"
+                                    name="password_confirmation" placeholder="Confirm your password" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="date_of_birth" class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control form-control-lg" id="date_of_birth"
+                                    name="date_of_birth" value="{{ old('date_of_birth') }}" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="gender" class="form-label">Gender</label>
+                                <select class="form-select form-control-lg" id="gender" name="gender" required>
+                                    <option value="">Select gender</option>
+                                    <option value="male" {{ old('gender')=='male' ? 'selected' : '' }}>Male</option>
+                                    <option value="female" {{ old('gender')=='female' ? 'selected' : '' }}>Female
+                                    </option>
+                                    <option value="other" {{ old('gender')=='other' ? 'selected' : '' }}>Other</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="nationality" class="form-label">Nationality</label>
+                                <input type="text" class="form-control form-control-lg" id="nationality"
+                                    name="nationality" placeholder="Nationality" value="{{ old('nationality') }}"
+                                    required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="passport_number" class="form-label">Passport Number</label>
+                                <input type="text" class="form-control form-control-lg" id="passport_number"
+                                    name="passport_number" placeholder="Passport number"
+                                    value="{{ old('passport_number') }}" required>
                             </div>
 
                             <div class="col-12">
-                                <label for="country" class="form-label">Country of Residence</label>
-                                <select class="form-select form-control-lg" id="country">
-                                    <option selected>Select country</option>
-                                    <option>United States</option>
-                                    <option>United Kingdom</option>
-                                    <option>Qatar</option>
-                                    <option>United Arab Emirates</option>
-                                </select>
+                                <label for="passport_expiry" class="form-label">Passport Expiry Date</label>
+                                <input type="date" class="form-control form-control-lg" id="passport_expiry"
+                                    name="passport_expiry" value="{{ old('passport_expiry') }}" required>
                             </div>
 
                             <div class="col-12">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="terms">
+                                    <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
                                     <label class="form-check-label" for="terms">
                                         I agree to the <a href="#" class="text-decoration-none">Terms and Conditions</a>
                                         and <a href="#" class="text-decoration-none">Privacy Policy</a>
@@ -129,7 +166,7 @@
 
                             <div class="col-12">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="newsletter">
+                                    <input class="form-check-input" type="checkbox" id="newsletter" name="newsletter">
                                     <label class="form-check-label" for="newsletter">
                                         Send me exclusive offers and travel inspiration
                                     </label>
@@ -220,4 +257,4 @@
 <button class="feedback-btn">
     <i class="bi bi-chat-left-text"></i> Feedback
 </button>
-@endsections
+@endsection

@@ -12,134 +12,134 @@ class FlightSeeder extends Seeder
 {
     public function run()
     {
-        // Get or create airlines
+        // Get or create airlines - USING EXACT COLUMNS FROM YOUR MIGRATION
         $qatarAirways = Airline::firstOrCreate([
             'code' => 'QR'
         ], [
             'name' => 'Qatar Airways',
-            'logo' => 'qatar_airways.png'
+            'logo' => 'qatar_airways.png',
+            'country' => 'Qatar',
+            'description' => 'National airline of Qatar'
         ]);
 
         $emirates = Airline::firstOrCreate([
             'code' => 'EK'
         ], [
             'name' => 'Emirates',
-            'logo' => 'emirates.png'
+            'logo' => 'emirates.png',
+            'country' => 'UAE',
+            'description' => 'Flag carrier of the United Arab Emirates'
         ]);
 
         $ethiopian = Airline::firstOrCreate([
             'code' => 'ET'
         ], [
             'name' => 'Ethiopian Airlines',
-            'logo' => 'ethiopian.png'
+            'logo' => 'ethiopian.png',
+            'country' => 'Ethiopia',
+            'description' => 'Flag carrier of Ethiopia'
         ]);
 
         $britishAirways = Airline::firstOrCreate([
             'code' => 'BA'
         ], [
             'name' => 'British Airways',
-            'logo' => 'british_airways.png'
+            'logo' => 'british_airways.png',
+            'country' => 'United Kingdom',
+            'description' => 'Flag carrier of the United Kingdom'
         ]);
 
         $airFrance = Airline::firstOrCreate([
             'code' => 'AF'
         ], [
             'name' => 'Air France',
-            'logo' => 'air_france.png'
+            'logo' => 'air_france.png',
+            'country' => 'France',
+            'description' => 'Flag carrier of France'
         ]);
 
         // Get or create airports
-        $doh = Airport::firstOrCreate([
-            'code' => 'DOH'
-        ], [
+        $doh = Airport::firstOrCreate(['code' => 'DOH'], [
             'name' => 'Hamad International Airport',
             'city' => 'Doha',
             'country' => 'Qatar',
-            'timezone' => 'Asia/Qatar'
+            'timezone' => 'Asia/Qatar',
+            'is_active' => true
         ]);
 
-        $dxb = Airport::firstOrCreate([
-            'code' => 'DXB'
-        ], [
+        $dxb = Airport::firstOrCreate(['code' => 'DXB'], [
             'name' => 'Dubai International Airport',
             'city' => 'Dubai',
             'country' => 'UAE',
-            'timezone' => 'Asia/Dubai'
+            'timezone' => 'Asia/Dubai',
+            'is_active' => true
         ]);
 
-        $add = Airport::firstOrCreate([
-            'code' => 'ADD'
-        ], [
+        $add = Airport::firstOrCreate(['code' => 'ADD'], [
             'name' => 'Bole International Airport',
             'city' => 'Addis Ababa',
             'country' => 'Ethiopia',
-            'timezone' => 'Africa/Addis_Ababa'
+            'timezone' => 'Africa/Addis_Ababa',
+            'is_active' => true
         ]);
 
-        $los = Airport::firstOrCreate([
-            'code' => 'LOS'
-        ], [
+        $los = Airport::firstOrCreate(['code' => 'LOS'], [
             'name' => 'Murtala Muhammed International Airport',
             'city' => 'Lagos',
             'country' => 'Nigeria',
-            'timezone' => 'Africa/Lagos'
+            'timezone' => 'Africa/Lagos',
+            'is_active' => true
         ]);
 
-        $lhr = Airport::firstOrCreate([
-            'code' => 'LHR'
-        ], [
+        $lhr = Airport::firstOrCreate(['code' => 'LHR'], [
             'name' => 'Heathrow Airport',
             'city' => 'London',
             'country' => 'UK',
-            'timezone' => 'Europe/London'
+            'timezone' => 'Europe/London',
+            'is_active' => true
         ]);
 
-        $cdg = Airport::firstOrCreate([
-            'code' => 'CDG'
-        ], [
+        $cdg = Airport::firstOrCreate(['code' => 'CDG'], [
             'name' => 'Charles de Gaulle Airport',
             'city' => 'Paris',
             'country' => 'France',
-            'timezone' => 'Europe/Paris'
+            'timezone' => 'Europe/Paris',
+            'is_active' => true
         ]);
 
-        $jfk = Airport::firstOrCreate([
-            'code' => 'JFK'
-        ], [
+        $jfk = Airport::firstOrCreate(['code' => 'JFK'], [
             'name' => 'John F. Kennedy International Airport',
             'city' => 'New York',
             'country' => 'USA',
-            'timezone' => 'America/New_York'
+            'timezone' => 'America/New_York',
+            'is_active' => true
         ]);
 
-        $nbo = Airport::firstOrCreate([
-            'code' => 'NBO'
-        ], [
+        $nbo = Airport::firstOrCreate(['code' => 'NBO'], [
             'name' => 'Jomo Kenyatta International Airport',
             'city' => 'Nairobi',
             'country' => 'Kenya',
-            'timezone' => 'Africa/Nairobi'
+            'timezone' => 'Africa/Nairobi',
+            'is_active' => true
         ]);
 
-        $jnb = Airport::firstOrCreate([
-            'code' => 'JNB'
-        ], [
+        $jnb = Airport::firstOrCreate(['code' => 'JNB'], [
             'name' => 'O.R. Tambo International Airport',
             'city' => 'Johannesburg',
             'country' => 'South Africa',
-            'timezone' => 'Africa/Johannesburg'
+            'timezone' => 'Africa/Johannesburg',
+            'is_active' => true
         ]);
 
-        $bom = Airport::firstOrCreate([
-            'code' => 'BOM'
-        ], [
+        $bom = Airport::firstOrCreate(['code' => 'BOM'], [
             'name' => 'Chhatrapati Shivaji Maharaj International Airport',
             'city' => 'Mumbai',
             'country' => 'India',
-            'timezone' => 'Asia/Kolkata'
+            'timezone' => 'Asia/Kolkata',
+            'is_active' => true
         ]);
 
-        // Sample flights data
+        // Sample flights data - REMOVED aircraft_type column
         $flights = [
             // Qatar Airways flights
             [
@@ -149,12 +149,10 @@ class FlightSeeder extends Seeder
                 'arrival_airport_id' => $dxb->id,
                 'departure_time' => Carbon::now()->addDays(1)->setTime(8, 0),
                 'arrival_time' => Carbon::now()->addDays(1)->setTime(10, 30),
-                'duration' => 150, // minutes
-                'aircraft_type' => 'A320',
+                'duration' => 150,
                 'class' => 'economy',
                 'price' => 299.99,
                 'available_seats' => 150,
-                'baggage_allowance' => 30,
                 'status' => 'scheduled'
             ],
             [
@@ -165,11 +163,9 @@ class FlightSeeder extends Seeder
                 'departure_time' => Carbon::now()->addDays(1)->setTime(14, 0),
                 'arrival_time' => Carbon::now()->addDays(1)->setTime(19, 30),
                 'duration' => 450,
-                'aircraft_type' => 'B777',
                 'class' => 'business',
                 'price' => 1899.99,
                 'available_seats' => 40,
-                'baggage_allowance' => 40,
                 'status' => 'scheduled'
             ],
             [
@@ -180,11 +176,9 @@ class FlightSeeder extends Seeder
                 'departure_time' => Carbon::now()->addDays(2)->setTime(10, 0),
                 'arrival_time' => Carbon::now()->addDays(2)->setTime(17, 0),
                 'duration' => 780,
-                'aircraft_type' => 'A380',
                 'class' => 'first',
                 'price' => 3499.99,
                 'available_seats' => 12,
-                'baggage_allowance' => 50,
                 'status' => 'scheduled'
             ],
 
@@ -197,11 +191,9 @@ class FlightSeeder extends Seeder
                 'departure_time' => Carbon::now()->addDays(1)->setTime(9, 30),
                 'arrival_time' => Carbon::now()->addDays(1)->setTime(13, 45),
                 'duration' => 435,
-                'aircraft_type' => 'A380',
                 'class' => 'economy',
                 'price' => 599.99,
                 'available_seats' => 200,
-                'baggage_allowance' => 25,
                 'status' => 'scheduled'
             ],
             [
@@ -212,11 +204,9 @@ class FlightSeeder extends Seeder
                 'departure_time' => Carbon::now()->addDays(1)->setTime(16, 0),
                 'arrival_time' => Carbon::now()->addDays(1)->setTime(20, 30),
                 'duration' => 210,
-                'aircraft_type' => 'B777',
                 'class' => 'business',
                 'price' => 1299.99,
                 'available_seats' => 35,
-                'baggage_allowance' => 40,
                 'status' => 'scheduled'
             ],
 
@@ -229,11 +219,9 @@ class FlightSeeder extends Seeder
                 'departure_time' => Carbon::now()->addDays(1)->setTime(11, 0),
                 'arrival_time' => Carbon::now()->addDays(1)->setTime(14, 30),
                 'duration' => 210,
-                'aircraft_type' => 'B737',
                 'class' => 'economy',
                 'price' => 399.99,
                 'available_seats' => 120,
-                'baggage_allowance' => 23,
                 'status' => 'scheduled'
             ],
             [
@@ -244,11 +232,9 @@ class FlightSeeder extends Seeder
                 'departure_time' => Carbon::now()->addDays(1)->setTime(13, 0),
                 'arrival_time' => Carbon::now()->addDays(1)->setTime(15, 0),
                 'duration' => 120,
-                'aircraft_type' => 'Dash 8',
                 'class' => 'economy',
                 'price' => 249.99,
                 'available_seats' => 70,
-                'baggage_allowance' => 20,
                 'status' => 'scheduled'
             ],
 
@@ -261,11 +247,9 @@ class FlightSeeder extends Seeder
                 'departure_time' => Carbon::now()->addDays(1)->setTime(18, 0),
                 'arrival_time' => Carbon::now()->addDays(1)->setTime(21, 0),
                 'duration' => 480,
-                'aircraft_type' => 'B787',
                 'class' => 'economy',
                 'price' => 699.99,
                 'available_seats' => 180,
-                'baggage_allowance' => 23,
                 'status' => 'scheduled'
             ],
 
@@ -278,11 +262,9 @@ class FlightSeeder extends Seeder
                 'departure_time' => Carbon::now()->addDays(1)->setTime(20, 0),
                 'arrival_time' => Carbon::now()->addDays(2)->setTime(7, 0),
                 'duration' => 660,
-                'aircraft_type' => 'A330',
                 'class' => 'business',
                 'price' => 1599.99,
                 'available_seats' => 28,
-                'baggage_allowance' => 32,
                 'status' => 'scheduled'
             ],
 
@@ -295,11 +277,9 @@ class FlightSeeder extends Seeder
                 'departure_time' => Carbon::now()->addDays(1)->setTime(19, 0),
                 'arrival_time' => Carbon::now()->addDays(1)->setTime(21, 30),
                 'duration' => 150,
-                'aircraft_type' => 'A320',
                 'class' => 'economy',
                 'price' => 279.99,
                 'available_seats' => 140,
-                'baggage_allowance' => 30,
                 'status' => 'scheduled'
             ],
             [
@@ -310,11 +290,9 @@ class FlightSeeder extends Seeder
                 'departure_time' => Carbon::now()->addDays(2)->setTime(15, 0),
                 'arrival_time' => Carbon::now()->addDays(2)->setTime(23, 30),
                 'duration' => 450,
-                'aircraft_type' => 'B777',
                 'class' => 'business',
                 'price' => 1399.99,
                 'available_seats' => 32,
-                'baggage_allowance' => 40,
                 'status' => 'scheduled'
             ],
         ];

@@ -68,22 +68,33 @@
                         <p class="text-muted">Sign in to your Qatar Airways account</p>
                     </div>
 
-                    <form>
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('login') }}">
+                        @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label">Email Address</label>
-                            <input type="email" class="form-control form-control-lg" id="email"
-                                placeholder="Enter your email">
+                            <input type="email" class="form-control form-control-lg" id="email" name="email"
+                                placeholder="Enter your email" value="{{ old('email') }}" required>
                         </div>
 
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control form-control-lg" id="password"
-                                placeholder="Enter your password">
+                            <input type="password" class="form-control form-control-lg" id="password" name="password"
+                                placeholder="Enter your password" required>
                         </div>
 
                         <div class="mb-3 form-check d-flex justify-content-between align-items-center">
                             <div>
-                                <input type="checkbox" class="form-check-input" id="remember">
+                                <input type="checkbox" class="form-check-input" id="remember" name="remember">
                                 <label class="form-check-label" for="remember">Remember me</label>
                             </div>
                             <a href="#" class="text-decoration-none">Forgot password?</a>
