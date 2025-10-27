@@ -74,11 +74,12 @@
                                 <div class="time">{{ $booking->flight->departure_time->format('h:i A') }}</div>
                                 <div class="date">{{ $booking->flight->departure_time->format('D, M d, Y') }}</div>
                                 <div class="airport">
-                                    <strong>{{ $booking->flight->departure_airport->code }}</strong>
-                                    {{ $booking->flight->departure_airport->name }}
+                                    <strong>{{ $booking->flight->departureAirport->code ?? 'N/A' }}</strong>
+                                    {{ $booking->flight->departureAirport->name ?? 'Airport information not available'
+                                    }}
                                 </div>
-                                <div class="city">{{ $booking->flight->departure_airport->city }}, {{
-                                    $booking->flight->departure_airport->country }}</div>
+                                <div class="city">{{ $booking->flight->departureAirport->city ?? 'N/A' }}, {{
+                                    $booking->flight->departureAirport->country ?? 'N/A' }}</div>
                             </div>
 
                             <div class="route-middle">
@@ -93,11 +94,11 @@
                                 <div class="time">{{ $booking->flight->arrival_time->format('h:i A') }}</div>
                                 <div class="date">{{ $booking->flight->arrival_time->format('D, M d, Y') }}</div>
                                 <div class="airport">
-                                    <strong>{{ $booking->flight->arrival_airport->code }}</strong>
-                                    {{ $booking->flight->arrival_airport->name }}
+                                    <strong>{{ $booking->flight->arrivalAirport->code ?? 'N/A' }}</strong>
+                                    {{ $booking->flight->arrivalAirport->name ?? 'Airport information not available' }}
                                 </div>
-                                <div class="city">{{ $booking->flight->arrival_airport->city }}, {{
-                                    $booking->flight->arrival_airport->country }}</div>
+                                <div class="city">{{ $booking->flight->arrivalAirport->city ?? 'N/A' }}, {{
+                                    $booking->flight->arrivalAirport->country ?? 'N/A' }}</div>
                             </div>
                         </div>
 
@@ -216,7 +217,13 @@
                         </div>
                         <div class="summary-item">
                             <span>Payment Method</span>
-                            <strong>{{ ucfirst(str_replace('_', ' ', $booking->payment->payment_method)) }}</strong>
+                            <strong>
+                                @if($booking->payment)
+                                {{ ucfirst(str_replace('_', ' ', $booking->payment->payment_method)) }}
+                                @else
+                                Not specified
+                                @endif
+                            </strong>
                         </div>
                         <div class="summary-item total">
                             <span>Total Paid</span>
@@ -272,10 +279,7 @@
                     <i class="fas fa-search"></i>
                     Search More Flights
                 </a>
-                <a href="{{ route('tours.index') }}" class="btn-secondary">
-                    <i class="fas fa-umbrella-beach"></i>
-                    Browse Tours
-                </a>
+
             </div>
         </div>
     </div>

@@ -72,14 +72,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Flight Routes
 Route::get('/flights/search', [FlightController::class, 'search'])->name('flights.search');
 Route::get('/flights/{flight}', [FlightController::class, 'show'])->name('flights.show');
-Route::get('/flights/{flight}/book', [FlightController::class, 'book'])->name('flights.book');
 
 
-// API endpoint for airport autocomplete
-Route::get('/api/airports', [FlightController::class, 'getAirports'])->name('api.airports');
 
-// Flight booking
-Route::get('/flights/{flight}/book', [FlightController::class, 'book'])->name('flights.book');
 
 
 
@@ -90,11 +85,14 @@ Route::get('/flights/{flight}/book', [FlightController::class, 'book'])->name('f
 // Booking Routes (Protected)
 // routes/web.php
 Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/flights/{flight}/book', [FlightController::class, 'book'])->name('flights.book');
     Route::get('/flight/{flight}/book', [BookingController::class, 'book'])->name('booking.show');
     Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
     Route::get('/booking/{booking}/payment', [BookingController::class, 'payment'])->name('booking.payment');
     Route::post('/booking/{booking}/process-payment', [BookingController::class, 'processPayment'])->name('booking.process-payment');
     Route::get('/booking/{booking}/confirmation', [BookingController::class, 'confirmation'])->name('booking.confirmation');
     Route::get('/booking/{booking}/receipt', [BookingController::class, 'receipt'])->name('booking.receipt');
+    Route::get('/booking/{booking}/ticket', [BookingController::class, 'ticket'])->name('booking.ticket');
     Route::delete('/booking/{booking}', [BookingController::class, 'destroy'])->name('booking.destroy');
 });

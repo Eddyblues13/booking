@@ -75,6 +75,9 @@
                         </div>
                         <h5 class="mb-1">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h5>
                         <p class="text-muted mb-0">{{ Auth::user()->email }}</p>
+                        @if(Auth::user()->phone)
+                        <p class="text-muted small">{{ Auth::user()->phone }}</p>
+                        @endif
                     </div>
                     <nav class="nav flex-column">
                         <a class="nav-link active" href="{{ route('dashboard') }}">
@@ -140,10 +143,12 @@
                                 <tr>
                                     <th>Booking Ref</th>
                                     <th>Flight</th>
+                                    <th>Airline</th>
                                     <th>Date</th>
                                     <th>Passengers</th>
                                     <th>Amount</th>
                                     <th>Status</th>
+                                    <th>Payment Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -152,24 +157,66 @@
                                 <tr>
                                     <td><strong>{{ $booking->booking_reference }}</strong></td>
                                     <td>
+                                        @if($booking->flight && $booking->flight->departureAirport &&
+                                        $booking->flight->arrivalAirport)
                                         {{ $booking->flight->departureAirport->code }} →
                                         {{ $booking->flight->arrivalAirport->code }}
+                                        @else
+                                        <span class="text-muted">Flight details unavailable</span>
+                                        @endif
                                     </td>
-                                    <td>{{ $booking->flight->departure_time->format('M d, Y') }}</td>
+                                    <td>
+                                        @if($booking->flight && $booking->flight->airline)
+                                        {{ $booking->flight->airline->name }}
+                                        @else
+                                        <span class="text-muted">N/A</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($booking->flight)
+                                        {{ $booking->flight->departure_time->format('M d, Y') }}
+                                        @else
+                                        <span class="text-muted">N/A</span>
+                                        @endif
+                                    </td>
                                     <td>{{ $booking->passenger_count }}</td>
                                     <td>${{ number_format($booking->total_amount, 2) }}</td>
                                     <td>
-                                        <span
-                                            class="badge bg-{{ $booking->status === 'confirmed' ? 'success' : 'warning' }}">
+                                        @php
+                                        $statusClass = match($booking->status) {
+                                        'confirmed' => 'success',
+                                        'pending' => 'warning',
+                                        'cancelled' => 'danger',
+                                        default => 'secondary'
+                                        };
+                                        @endphp
+                                        <span class="badge bg-{{ $statusClass }}">
                                             {{ ucfirst($booking->status) }}
                                         </span>
                                     </td>
                                     <td>
+                                        @php
+                                        $paymentStatusClass = match($booking->payment_status) {
+                                        'completed' => 'success',
+                                        'pending' => 'warning',
+                                        'failed' => 'danger',
+                                        default => 'secondary'
+                                        };
+                                        @endphp
+                                        <span class="badge bg-{{ $paymentStatusClass }}">
+                                            {{ ucfirst($booking->payment_status ?? 'pending') }}
+                                        </span>
+                                    </td>
+                                    <td>
                                         <div class="btn-group">
+                                            @if($booking->flight)
                                             <a href="{{ route('booking.ticket', $booking) }}"
                                                 class="btn btn-sm btn-outline-primary">Ticket</a>
                                             <a href="{{ route('booking.receipt', $booking) }}"
                                                 class="btn btn-sm btn-outline-secondary">Receipt</a>
+                                            @else
+                                            <button class="btn btn-sm btn-outline-secondary" disabled>No Flight</button>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

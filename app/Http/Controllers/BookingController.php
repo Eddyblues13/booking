@@ -32,7 +32,7 @@ class BookingController extends Controller
 
         // Calculate price breakdown
         $baseFare = $flight->price;
-        
+
         // Adjust price based on class
         switch ($class) {
             case 'business':
@@ -42,7 +42,7 @@ class BookingController extends Controller
                 $baseFare *= 2;
                 break;
         }
-        
+
         $taxesAndFees = $baseFare * 0.15; // 15% taxes and fees
         $fuelSurcharge = $baseFare * 0.05; // 5% fuel surcharge
         $serviceCharge = 15.00; // Fixed service charge
@@ -116,7 +116,7 @@ class BookingController extends Controller
                 $baseFare *= 2;
                 break;
         }
-        
+
         $totalBaseFare = $baseFare * $passengerCount;
         $taxes = $totalBaseFare * 0.15;
         $serviceFee = 15.00;
@@ -256,7 +256,7 @@ class BookingController extends Controller
         if ($booking->isPendingPayment()) {
             // Restore seats
             $booking->flight->increment('available_seats', $booking->passenger_count);
-            
+
             $booking->update([
                 'status' => 'cancelled',
                 'cancelled_at' => now(),
@@ -267,5 +267,27 @@ class BookingController extends Controller
         }
 
         return back()->with('error', 'Cannot cancel confirmed booking.');
+    }
+
+
+    public function ticket(Booking $booking)
+    {
+        if ($booking->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $booking->load(['flight.departureAirport', 'flight.arrivalAirport', 'flight.airline', 'passengers', 'payment']);
+
+        return view('booking.ticket', compact('booking'));
+    }
+
+    public function index()
+    {
+        $bookings = Booking::where('user_id', Auth::id())
+            ->with(['flight.departureAirport', 'flight.arrivalAirport', 'flight.airline'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('booking.index', compact('bookings'));
     }
 }

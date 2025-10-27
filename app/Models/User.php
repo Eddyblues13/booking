@@ -54,4 +54,12 @@ class User extends Authenticatable
             'passport_expiry' => 'date',
         ];
     }
+
+    /**
+     * Get the bookings for the user.
+     */
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
 }
