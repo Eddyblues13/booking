@@ -23,15 +23,14 @@
 
         <div class="row">
             <div class="col-lg-8">
-                <form action="{{ route('booking.store') }}" method="POST" id="bookingForm"
-                    enctype="multipart/form-data">
+                <form action="{{ route('booking.store') }}" method="POST" id="bookingForm">
                     @csrf
-                    <input type="hidden" name="flight_id" value="{{ $flight->id ?? '' }}">
-                    <input type="hidden" name="adults" value="{{ $adults ?? 1 }}">
-                    <input type="hidden" name="children" value="{{ $children ?? 0 }}">
-                    <input type="hidden" name="infants" value="{{ $infants ?? 0 }}">
-                    <input type="hidden" name="class" value="{{ $class ?? 'economy' }}">
-                    <input type="hidden" name="trip_type" value="{{ $tripType ?? 'oneway' }}">
+                    <input type="hidden" name="flight_id" value="{{ $flight->id }}">
+                    <input type="hidden" name="adults" value="{{ $adults }}">
+                    <input type="hidden" name="children" value="{{ $children }}">
+                    <input type="hidden" name="infants" value="{{ $infants }}">
+                    <input type="hidden" name="class" value="{{ $class }}">
+                    <input type="hidden" name="trip_type" value="{{ $tripType }}">
 
                     <!-- Flight Details -->
                     <div class="booking-card">
@@ -216,19 +215,6 @@
                                     <input type="text" name="passengers[{{ $i }}][frequent_flyer]" class="form-control"
                                         placeholder="Optional">
                                 </div>
-                            </div>
-
-                            <!-- Document Upload -->
-                            <div class="document-upload" id="documentUpload{{ $i }}">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                                <h5>Upload Passport Copy</h5>
-                                <p class="text-muted">Drag & drop your passport copy here or click to browse</p>
-                                <input type="file" name="passengers[{{ $i }}][passport_copy]"
-                                    accept=".pdf,.jpg,.jpeg,.png" style="display: none;" id="passportFile{{ $i }}">
-                                <button type="button" class="btn btn-outline-primary mt-2"
-                                    onclick="document.getElementById('passportFile{{ $i }}').click()">
-                                    <i class="fas fa-upload me-2"></i>Choose File
-                                </button>
                             </div>
                     </div>
                     @if($i < $adults - 1) <hr class="my-4">
@@ -521,97 +507,7 @@
             }, 2000);
         });
         
-        // Document upload functionality for all upload areas
-        const documentUploads = document.querySelectorAll('[id^="documentUpload"]');
-        
-        documentUploads.forEach((documentUpload, index) => {
-            const passportFile = document.getElementById(`passportFile${index}`);
-            
-            if (documentUpload && passportFile) {
-                // Drag and drop functionality
-                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                    documentUpload.addEventListener(eventName, preventDefaults, false);
-                });
-                
-                function preventDefaults(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-                
-                ['dragenter', 'dragover'].forEach(eventName => {
-                    documentUpload.addEventListener(eventName, highlight, false);
-                });
-                
-                ['dragleave', 'drop'].forEach(eventName => {
-                    documentUpload.addEventListener(eventName, unhighlight, false);
-                });
-                
-                function highlight() {
-                    documentUpload.classList.add('dragover');
-                }
-                
-                function unhighlight() {
-                    documentUpload.classList.remove('dragover');
-                }
-                
-                documentUpload.addEventListener('drop', handleDrop, false);
-                
-                function handleDrop(e) {
-                    const dt = e.dataTransfer;
-                    const files = dt.files;
-                    handleFiles(files, index);
-                }
-                
-                passportFile.addEventListener('change', function() {
-                    handleFiles(this.files, index);
-                });
-                
-                function handleFiles(files, uploadIndex) {
-                    if (files.length > 0) {
-                        const file = files[0];
-                        if (file.type.match('image.*') || file.type === 'application/pdf') {
-                            if (file.size > 5 * 1024 * 1024) { // 5MB limit
-                                alert('File size must be less than 5MB');
-                                return;
-                            }
-                            
-                            // Update UI to show file selected
-                            const uploadArea = document.getElementById(`documentUpload${uploadIndex}`);
-                            uploadArea.innerHTML = `
-                                <i class="fas fa-check-circle text-success"></i>
-                                <h5>File Selected</h5>
-                                <p class="text-muted">${file.name}</p>
-                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="resetDocumentUpload(${uploadIndex})">
-                                    Change File
-                                </button>
-                            `;
-                        } else {
-                            alert('Please select a PDF, JPG, or PNG file.');
-                        }
-                    }
-                }
-            }
-        });
-    });
-
-    // Reset document upload
-    function resetDocumentUpload(index) {
-        const documentUpload = document.getElementById(`documentUpload${index}`);
-        const passportFile = document.getElementById(`passportFile${index}`);
-        
-        documentUpload.innerHTML = `
-            <i class="fas fa-cloud-upload-alt"></i>
-            <h5>Upload Passport Copy</h5>
-            <p class="text-muted">Drag & drop your passport copy here or click to browse</p>
-            <button type="button" class="btn btn-outline-primary mt-2" onclick="document.getElementById('passportFile${index}').click()">
-                <i class="fas fa-upload me-2"></i>Choose File
-            </button>
-        `;
-        passportFile.value = '';
-    }
-
-    // Initialize date restrictions
-    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize date restrictions
         const today = new Date().toISOString().split('T')[0];
         
         // Set max date for date of birth (12 years ago)

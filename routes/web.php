@@ -82,10 +82,19 @@ Route::get('/api/airports', [FlightController::class, 'getAirports'])->name('api
 Route::get('/flights/{flight}/book', [FlightController::class, 'book'])->name('flights.book');
 
 
+
+
+
+
+
 // Booking Routes (Protected)
+// routes/web.php
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
-    Route::get('/booking/{booking}/ticket', [BookingController::class, 'ticket'])->name('booking.ticket');
+    Route::get('/flight/{flight}/book', [BookingController::class, 'book'])->name('booking.show');
+    Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
+    Route::get('/booking/{booking}/payment', [BookingController::class, 'payment'])->name('booking.payment');
+    Route::post('/booking/{booking}/process-payment', [BookingController::class, 'processPayment'])->name('booking.process-payment');
+    Route::get('/booking/{booking}/confirmation', [BookingController::class, 'confirmation'])->name('booking.confirmation');
     Route::get('/booking/{booking}/receipt', [BookingController::class, 'receipt'])->name('booking.receipt');
+    Route::delete('/booking/{booking}', [BookingController::class, 'destroy'])->name('booking.destroy');
 });

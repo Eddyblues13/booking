@@ -1,4 +1,5 @@
 <?php
+// 2025_10_08_145410_create_bookings_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -20,11 +21,13 @@ return new class extends Migration
             $table->decimal('service_fee', 10, 2);
             $table->string('contact_email');
             $table->string('contact_phone');
+            $table->string('contact_phone_secondary')->nullable();
             $table->string('emergency_contact_name');
             $table->string('emergency_contact_phone');
             $table->text('special_requests')->nullable();
             $table->enum('status', ['pending_payment', 'confirmed', 'cancelled', 'refunded'])->default('pending_payment');
             $table->enum('payment_status', ['pending', 'completed', 'failed', 'refunded'])->default('pending');
+            $table->string('payment_method')->nullable();
             $table->timestamp('cancelled_at')->nullable();
             $table->text('cancellation_reason')->nullable();
             $table->timestamps();

@@ -1,4 +1,5 @@
 <?php
+// app/Models/Passenger.php
 
 namespace App\Models;
 
@@ -15,9 +16,14 @@ class Passenger extends Model
         'first_name',
         'last_name',
         'date_of_birth',
+        'gender',
         'nationality',
         'passport_number',
         'passport_expiry',
+        'passport_country',
+        'email',
+        'phone',
+        'frequent_flyer_number',
     ];
 
     protected $casts = [
@@ -35,3 +41,7 @@ class Passenger extends Model
         return $this->title . ' ' . $this->first_name . ' ' . $this->last_name;
     }
 }
+
+
+
+
