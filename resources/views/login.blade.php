@@ -108,18 +108,7 @@
                         </div>
                     </form>
 
-                    <div class="auth-divider my-4">
-                        <span>or continue with</span>
-                    </div>
 
-                    <div class="social-auth">
-                        <button class="btn btn-outline-dark btn-lg w-100 mb-2">
-                            <i class="bi bi-google"></i> Continue with Google
-                        </button>
-                        <button class="btn btn-outline-dark btn-lg w-100">
-                            <i class="bi bi-apple"></i> Continue with Apple
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>
